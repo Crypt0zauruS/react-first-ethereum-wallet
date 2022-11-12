@@ -1,4 +1,4 @@
-My first wallet app interacting with my Wallet contract deployed on Goerli Ethereum testnet with hardhat.
+My first wallet dApp interacting with my Wallet contract deployed on Goerli Ethereum testnet with hardhat.
 
 I've used Alchemy to deploy my wallet contract.
 
