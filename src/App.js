@@ -86,26 +86,32 @@ function App() {
         method: "eth_requestAccounts",
       });
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      // Need a signer to send transactions
-      const signer = provider.getSigner();
+      if (window.ethereum.networkVersion !== "5") {
+        setError("Bad network");
+        setAccount(null);
+        return;
+      } else {
+        // Need a signer to send transactions
+        const signer = provider.getSigner();
 
-      try {
-        // transaction properties
-        const tx = {
-          from: accounts[0],
-          to: WALLET_CONTRACT_ADDRESS,
-          value: ethers.utils.parseEther(amountSend), // convert wei to ether
-        };
+        try {
+          // transaction properties
+          const tx = {
+            from: accounts[0],
+            to: WALLET_CONTRACT_ADDRESS,
+            value: ethers.utils.parseEther(amountSend), // convert wei to ether
+          };
 
-        const transaction = await signer.sendTransaction(tx);
-        await transaction.wait();
-        // flush state
-        setAmountSend("");
-        // update balance
-        getBalance();
-        setSuccess("Transaction success !");
-      } catch (err) {
-        setError("There was an error !");
+          const transaction = await signer.sendTransaction(tx);
+          await transaction.wait();
+          // flush state
+          setAmountSend("");
+          // update balance
+          getBalance();
+          setSuccess("Transaction success !");
+        } catch (err) {
+          setError("There was an error !");
+        }
       }
     }
   }
@@ -123,28 +129,34 @@ function App() {
         method: "eth_requestAccounts",
       });
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      // Need a signer to send transactions
-      const signer = provider.getSigner();
-      // new contract instance with a signer
-      const contract = new ethers.Contract(
-        WALLET_CONTRACT_ADDRESS,
-        abi,
-        signer
-      );
-      let transaction;
-      try {
-        transaction = await contract.withdrawMoney(
-          accounts[0],
-          ethers.utils.parseEther(amountWithdraw)
+      if (window.ethereum.networkVersion !== "5") {
+        setError("Bad network");
+        setAccount(null);
+        return;
+      } else {
+        // Need a signer to send transactions
+        const signer = provider.getSigner();
+        // new contract instance with a signer
+        const contract = new ethers.Contract(
+          WALLET_CONTRACT_ADDRESS,
+          abi,
+          signer
         );
-        await transaction.wait();
-        // flush state
-        setAmountWithdraw("");
-        // update balance
-        getBalance();
-        setSuccess("Money withdrawed successfully !");
-      } catch (err) {
-        setError("There was an error !");
+        let transaction;
+        try {
+          transaction = await contract.withdrawMoney(
+            accounts[0],
+            ethers.utils.parseEther(amountWithdraw)
+          );
+          await transaction.wait();
+          // flush state
+          setAmountWithdraw("");
+          // update balance
+          getBalance();
+          setSuccess("Money withdrawed successfully !");
+        } catch (err) {
+          setError("There was an error !");
+        }
       }
     }
   }
