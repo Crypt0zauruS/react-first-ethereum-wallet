@@ -183,7 +183,7 @@ function App() {
                 <h3>Send Ether in this Wallet</h3>
                 <input
                   type="number"
-                  disabled={account === ""}
+                  disabled={!account}
                   min={0}
                   required
                   placeholder="Amount in Ethers"
@@ -195,7 +195,7 @@ function App() {
                 <h3>Withdraw Ethers from this wallet</h3>
                 <input
                   type="number"
-                  disabled={account === ""}
+                  disabled={!account}
                   min={0}
                   required
                   placeholder="Amount in Ethers"
